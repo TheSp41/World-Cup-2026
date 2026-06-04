@@ -1,0 +1,1 @@
+Consists of multiple simple yet entertaining games related to the world cup 2026
