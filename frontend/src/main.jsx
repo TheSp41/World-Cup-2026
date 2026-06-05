@@ -5,13 +5,16 @@ import Navbar from './components/Navbar.jsx'
 import { BrowserRouter } from 'react-router-dom'
 import ReactDOM from 'react-dom/client'
 import { PredictionProvider } from './context/PredictionContext.jsx'
+import { KnockoutProvider } from './context/KnockoutContext.jsx'
 ReactDOM.createRoot(document.getElementById('root')).render(
 
 <StrictMode>
   <BrowserRouter>
-    <PredictionProvider>
-    <App />
-    </PredictionProvider>
+    <KnockoutProvider>
+      <PredictionProvider>
+      <App />
+      </PredictionProvider>
+    </KnockoutProvider>
   </BrowserRouter>
 </StrictMode>
 )

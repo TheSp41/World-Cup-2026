@@ -1,6 +1,6 @@
-import React, { createContext, useState, useContext } from 'react';
+import React, { createContext, useState, useContext } from 'react'
 
-const PredictionContext = createContext();
+const PredictionContext = createContext()
 
 export const PredictionProvider = ({ children }) => {
   const [groups, setGroups] = useState({
@@ -18,9 +18,8 @@ export const PredictionProvider = ({ children }) => {
     'L': ['England', 'Croatia', 'Ghana', 'Panama']
   });
   
-  const [selectedTeams,setSelectedTeams]=useState([])
   return (
-    <PredictionContext.Provider value={{ groups, setGroups,selectedTeams,setSelectedTeams }}>
+    <PredictionContext.Provider value={{ groups, setGroups}}>
       {children}
     </PredictionContext.Provider>
   );

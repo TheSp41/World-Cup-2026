@@ -1,12 +1,34 @@
-import React from 'react'
+import {React,useState} from 'react'
 import { usePrediction } from '../context/PredictionContext'
+import { useKnockout } from '../context/KnockoutContext'
 import { toast, ToastContainer } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import 'react-toastify/dist/ReactToastify.css'
-
 const BestEight = () => {
-  const { groups, selectedTeams, setSelectedTeams } = usePrediction();
-
+  const { groups } = usePrediction();
+  const [selectedTeams,setSelectedTeams]=useState([])
+  const {Top32,setTop32,best8,setBest8}=useKnockout()
+  const final32=()=>{
+            if(selectedTeams.length < 8) {
+                toast.error("Please select exactly 8 teams before submitting.",{autoClose:2000});
+            }
+            else{
+                const newTop32 = {}
+                Object.entries(groups).forEach(([group, teams]) => {
+                  newTop32[`${group}1`] = teams[0];
+                  newTop32[`${group}2`] = teams[1];
+                })
+                let currentBest8 = "";
+                selectedTeams.forEach((t) => {
+                  newTop32[`3${t.group}`] = t.team;
+                  currentBest8 += t.group;
+                });
+                const temp=[...currentBest8].sort().join("")
+                setBest8(temp)
+                setTop32(newTop32)
+                navigate('/MatchPrediction/Round32')
+            } 
+  }
   const thirdPlaceTeams = Object.entries(groups).map(([group, teams]) => ({
     group,
     team: teams[2],
@@ -77,17 +99,7 @@ const BestEight = () => {
 
       <div className="flex justify-end mt-12 pr-[5%] mb-[3%]">
         <button
-          onClick={() => {
-            if(selectedTeams.length < 8) {
-                toast.error("Please select exactly 8 teams before submitting.",{autoClose:2000});
-            }
-            else{
-                const sortedTeams = [...selectedTeams].sort((a, b) => a.group.localeCompare(b.group));
-                setSelectedTeams(sortedTeams);
-                console.log(sortedTeams)
-                navigate('/MatchPrediction/Round32')
-            } 
-          }}
+          onClick={() => final32()}
           className="bg-blue-900 border border-transparent hover:border-amber-50 text-white text-lg font-bold py-3 px-12 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
           Continue
