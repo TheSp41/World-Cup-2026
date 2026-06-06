@@ -15,8 +15,8 @@ const BestEight = () => {
             else{
                 const newTop32 = {}
                 Object.entries(groups).forEach(([group, teams]) => {
-                  newTop32[`${group}1`] = teams[0];
-                  newTop32[`${group}2`] = teams[1];
+                  newTop32[`1${group}`] = teams[0];
+                  newTop32[`2${group}`] = teams[1];
                 })
                 let currentBest8 = "";
                 selectedTeams.forEach((t) => {
