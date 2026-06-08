@@ -1,5 +1,11 @@
-const loginController=require('../controllers/userController.js')
+const registerUser=require('../controllers/registerController.js')
 const express=require('express')
+const handleRefreshToken = require('../controllers/handleRefresh.js')
+const logoutUser = require('../controllers/logout.js')
+const loginUser=require('../controllers/loginController.js')
 const loginRouter=express.Router()
-loginRouter.post('/',loginController)
+loginRouter.post('/register',registerUser)
+loginRouter.post('/signin',loginUser)
+loginRouter.get('/refresh',handleRefreshToken)
+loginRouter.post('/logout',logoutUser)
 module.exports=loginRouter
