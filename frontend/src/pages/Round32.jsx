@@ -31,8 +31,8 @@ const Round32 = () => {
         <p className="text-gray-400">Round of 32 to Final</p>
       </div>
       
-      <div className="w-full overflow-x-auto pb-8">
-        <div className="flex flex-row w-full min-w-350 h-200 lg:h-225 bg-gray-900 rounded-xl shadow-2xl border border-gray-700 relative overflow-hidden">
+      <div className="w-full overflow-x-auto pb-8" >
+        <div style={{zoom:"0.6"}} className="flex flex-row w-full min-w-350 h-200 lg:h-225 bg-gray-900 rounded-xl shadow-2xl border border-gray-700 relative overflow-hidden">
           <div className="absolute inset-0 bg-gray-900/80 z-0"></div>
           <div className="flex flex-row w-full h-full z-10 p-6">
              <MatchColumn matches={8} side="left" round="ro32"/>
@@ -55,7 +55,7 @@ const Round32 = () => {
           </div>
         </div>
       </div>
-      <button onClick={saver()}>Lock Your Predictions</button>
+      <button onClick={saver}>Lock Your Predictions</button>
     </div>
   );
 };
