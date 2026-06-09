@@ -8,24 +8,53 @@ import StraightConnector from '../components/StraightConnector.jsx'
 import useLogicRoL32 from '../utils/LogicRoL32.jsx'
 import useLogicRoR32 from '../utils/LogicRoR32.jsx'
 import { useKnockout } from '../context/KnockoutContext.jsx'
+import { usePrediction } from '../context/PredictionContext.jsx'
 
 const Round32 = () => {
   useLogicRoL32()
   useLogicRoR32()
-  const { best8 } = useKnockout();
+  const { best8,Top32,roL32Left,roR32Right,win32L,win32R,quartersL,quartersR,semisL,semisR,final,winner,third } = useKnockout();
+  const {groups}=usePrediction()
   const navigate = useNavigate();
-
+ 
   useEffect(() => {
     if (!best8) {
       navigate('/MatchPrediction');
     }
   }, [best8, navigate]);
-  const saver=()=>{
-    
+  const saver = async () => {
+    const ro32 = [...roL32Left, ...roR32Right];
+    const ro16 = [...win32L, ...win32R];
+    const quarters = [...quartersL, ...quartersR];
+    const semis = [...semisL, ...semisR];
+
+    const toastId = toast.loading("Locking in your bracket...");
+
+    try {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND}/api/matchPrediction`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({ group: groups,knockouts:Top32,best8, ro32, ro16, quarters, semis, final, winner, thirdFinish: third })
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.msg || 'Failed to save predictions');
+      }
+
+      toast.update(toastId, { render: "Predictions locked successfully! 🏆", type: "success", isLoading: false, autoClose: 3000 });
+
+    } catch (error) {
+      toast.update(toastId, { render: error.message || "An error occurred while saving.", type: "error", isLoading: false, autoClose: 4000 });
+    }
   }
   return (
     
-    <div className="container mx-auto px-4 py-8">
+    <div className="items-center container mx-auto px-4 py-8">
       <div className="mb-8 text-center">
         <h1 className="text-3xl font-bold text-white mb-2">Tournament Knockout</h1>
         <p className="text-gray-400">Round of 32 to Final</p>
@@ -55,7 +84,14 @@ const Round32 = () => {
           </div>
         </div>
       </div>
-      <button onClick={saver}>Lock Your Predictions</button>
+      <div className="flex justify-center mt-10 mb-8">
+        <button 
+          onClick={saver}
+          className="px-8 py-4 bg-blue-950 hover:border-white border-2 border-blue-950 text-white text-sm font-semibold rounded-xl shadow-lg w-[19%]"
+        >
+          Lock Your Predictions
+        </button>
+      </div>
     </div>
   );
 };
