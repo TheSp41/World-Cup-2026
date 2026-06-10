@@ -1,0 +1,10 @@
+const express=require('express')
+const resultRouter=express.Router()
+const bracketHandler=require('../controllers/bracketHandler')
+const fetchBracket=require('../controllers/fetchBracket')
+const deleteBracket=require('../controllers/deleteBracket')
+const verifyToken=require('../middleware/verifyToken')
+resultRouter.post('/',verifyToken,bracketHandler)
+resultRouter.get('/',verifyToken,fetchBracket)
+resultRouter.delete('/',verifyToken,deleteBracket)
+module.exports=resultRouter

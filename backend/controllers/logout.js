@@ -1,9 +1,15 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
-
+require('dotenv').config()
 const logoutUser = async (req, res) => {
+    res.clearCookie('jwt', { httpOnly: true, 
+        sameSite:'strict', 
+        //secure:process.env.NODE_ENV !== 'development',
+        secure:false,
+        path:'/' });
+
     const cookies = req.cookies;
-    if (!cookies?.jwt) return res.sendStatus(204); 
+    if (!cookies?.jwt) return res.status(200).json({ msg: "Logged out successfully" }); 
 
     const refreshToken = cookies.jwt;
 
@@ -17,10 +23,10 @@ const logoutUser = async (req, res) => {
                 await foundUser.save();
             }
         }
-        res.clearCookie('jwt', { httpOnly: true, sameSite: 'strict', secure: true });
         res.status(200).json({ msg: "Logged out successfully" });
         
     } catch (err) {
+        console.error("Logout error:", err);
         res.status(500).json({ msg: "Server error" });
     }
 };

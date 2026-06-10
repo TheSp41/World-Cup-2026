@@ -1,6 +1,8 @@
 const bcrypt=require('bcrypt')
 const User=require('../models/userModel')
 const jwt=require('jsonwebtoken')
+require('dotenv').config()
+
 const loginUser=async (req,res)=>{
     const {email,password}=req.body
     try{
@@ -28,15 +30,18 @@ const loginUser=async (req,res)=>{
 
             res.cookie('jwt', refreshToken, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV !== 'development', 
+                //secure: process.env.NODE_ENV !== 'development', 
+                secure:false,
                 sameSite: 'strict', 
-                maxAge: 7*24*60*60*1000 
+                maxAge: 7*24*60*60*1000,
+                path:'/'
             })
-            res.status(200).json({ msg:"Login successful",accessToken, userId: userExists._id });
+        res.status(200).json({ msg:"Login successful",accessToken, userId: userExists._id, username: userExists.username });
         }
         else return res.status(401).json({success:false,msg:"Incorrect login details"})
     }
-    catch{
+    catch(err){
+        console.error("Login error:", err)
         res.status(500).json({success:false,msg:"Server error"})
     }
 }
