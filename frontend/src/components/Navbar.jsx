@@ -12,8 +12,8 @@ const Navbar = () => {
   const navLinks = [
     { name: 'Hub', path: '/' },
     { name: 'Standings', path: '/Standings' },
-    { name: 'Leagues', path: '/Leagues' },
-    { name: 'My XI', path: '/MyXI' },
+    { name: 'Guess Player', path: '/GuessPlayer' },
+    { name: 'Guess Country', path: '/GuessCountry' },
     { name: 'Predict', path: '/MatchPrediction' },
   ]
   useEffect(() => {
