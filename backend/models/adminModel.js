@@ -14,5 +14,5 @@ winner:{type:[String]},
 thirdFinish:{type:[String]},
 score:{type:Number,default:0}
 })
-const adminModel=mongoose.models.result || mongoose.model("admin",adminSchema)
+const adminModel=mongoose.models.admin || mongoose.model("admin",adminSchema)
 module.exports=adminModel

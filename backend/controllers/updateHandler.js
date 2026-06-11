@@ -20,7 +20,7 @@ const groups = (userGroup, adminGroup) => {
 
 const bestEight = (user8, admin8) => {
     let score = 0;
-    if(!admin8[0]) continue
+    if(!admin8[0]) return res.status(401)
     const admin=admin8[0],user=user8[0]
     for (let i = 0; i < admin.length; i++) {
         const adminChar = admin[i]
@@ -168,7 +168,6 @@ const updateHandler = async (req, res) => {
         
         return res.status(200).json({ success: true, msg: "All user scores updated successfully!" });
     } catch (err) {
-        console.error("Global Handler Error:", err);
         res.status(500).json({ success: false, msg: "Server error" });
     }
 };

@@ -1,6 +1,6 @@
 const mongoose=require('mongoose')
 const resultSchema=new mongoose.Schema({
-user:{type:mongoose.Schema.Types.ObjectId,ref:'User',required:true},
+user:{type:mongoose.Schema.Types.ObjectId,ref:'user',required:true},
 group:{type:Map,of:[String],required:true}, 
 best8:{type:[String],required:true},
 knockouts:{type:Map,of:[String],required:true},
