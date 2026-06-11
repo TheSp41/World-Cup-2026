@@ -25,8 +25,8 @@ const FinalMatch = () => {
       <div className="flex flex-col items-center w-full relative">
         <span className="absolute bottom-full mb-2 text-yellow-500 font-bold">Final</span>
         <div className="flex flex-col justify-between gap-1 h-14 sm:h-16 w-full opacity-100">
-           <button onClick={() => handleWinner(team1)} className={`flex-1 bg-gray-800 border-2 border-yellow-500 hover:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(250,204,21,0.4)] transition-colors cursor-pointer ${winner[0] === team1 && team1 ? 'bg-green-700 text-white' : ''}`}>{team1 || '\u00A0'}</button>
-           <button onClick={() => handleWinner(team2)} className={`flex-1 bg-gray-800 border-2 border-yellow-500 hover:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(250,204,21,0.4)] transition-colors cursor-pointer ${winner[0] === team2 && team2 ? 'bg-green-700 text-white' : ''}`}>{team2 || '\u00A0'}</button>
+           <button onClick={() => handleWinner(team1)} className={`flex-1 bg-gray-800 border-2 border-yellow-500  rounded-md shadow-[0_0_10px_rgba(250,204,21,0.4)] transition-colors cursor-pointer ${winner[0] === team1 && team1 ? 'bg-green-700 text-white' : ''}`}>{team1 || '\u00A0'}</button>
+           <button onClick={() => handleWinner(team2)} className={`flex-1 bg-gray-800 border-2 border-yellow-500  rounded-md shadow-[0_0_10px_rgba(250,204,21,0.4)] transition-colors cursor-pointer ${winner[0] === team2 && team2 ? 'bg-green-700 text-white' : ''}`}>{team2 || '\u00A0'}</button>
         </div>
       </div>
 
@@ -34,8 +34,8 @@ const FinalMatch = () => {
         <div className="flex flex-col items-center w-full relative">
           <span className="absolute bottom-full mb-2 text-orange-400 font-bold">3rd Place</span>
           <div className="flex flex-col justify-between gap-1 h-14 sm:h-16 w-full opacity-100">
-             <button onClick={() => handleThird(third1)} className={`flex-1 bg-gray-800 border-2 border-orange-400 hover:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(251,146,60,0.4)] transition-colors cursor-pointer ${third[0] === third1 && third1 ? 'bg-green-700 text-white' : ''}`}>{third1 || '\u00A0'}</button>
-             <button onClick={() => handleThird(third2)} className={`flex-1 bg-gray-800 border-2 border-orange-400 hover:bg-gray-700 rounded-md shadow-[0_0_10px_rgba(251,146,60,0.4)] transition-colors cursor-pointer ${third[0] === third2 && third2 ? 'bg-green-700 text-white' : ''}`}>{third2 || '\u00A0'}</button>
+             <button onClick={() => handleThird(third1)} className={`flex-1 bg-gray-800 border-2 border-orange-400  rounded-md shadow-[0_0_10px_rgba(251,146,60,0.4)] transition-colors cursor-pointer ${third[0] === third1 && third1 ? 'bg-green-700 text-white' : ''}`}>{third1 || '\u00A0'}</button>
+             <button onClick={() => handleThird(third2)} className={`flex-1 bg-gray-800 border-2 border-orange-400  rounded-md shadow-[0_0_10px_rgba(251,146,60,0.4)] transition-colors cursor-pointer ${third[0] === third2 && third2 ? 'bg-green-700 text-white' : ''}`}>{third2 || '\u00A0'}</button>
           </div>
         </div>
       </div>

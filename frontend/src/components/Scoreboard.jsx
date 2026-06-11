@@ -39,16 +39,14 @@ const MatchScorecard = ({ match }) => {
           )}
           {status === 'SCHEDULED' && (
             <span className="px-2.5 py-1 rounded-md text-blue-400 bg-blue-500/10 border border-blue-500/20">
-              {/* Uses the raw API 'time' prop (e.g., "18:00") so if kickoff is delayed, it updates */}
+        
               {time}
             </span>
           )}
         </div>
       </div>
 
-      {/* Teams and Scores */}
       <div className="space-y-3">
-        {/* Team 1 Row */}
         <div className={`flex items-center justify-between text-base ${isWinner(score?.team1, score?.team2)}`}>
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-8 h-6 bg-gray-900 border border-gray-700 text-[10px] font-bold text-gray-400 rounded uppercase tracking-wider shadow-inner">
@@ -61,7 +59,6 @@ const MatchScorecard = ({ match }) => {
           )}
         </div>
 
-        {/* Team 2 Row */}
         <div className={`flex items-center justify-between text-base ${isWinner(score?.team2, score?.team1)}`}>
           <div className="flex items-center gap-3">
             <div className="flex items-center justify-center w-8 h-6 bg-gray-900 border border-gray-700 text-[10px] font-bold text-gray-400 rounded uppercase tracking-wider shadow-inner">

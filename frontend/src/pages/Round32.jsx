@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useContext } from 'react'
 import { useNavigate } from 'react-router-dom'
 import scenerios from '../utils/scenerios.js'
 import MatchColumn from '../components/MatchColumn.jsx'
@@ -9,12 +9,17 @@ import useLogicRoL32 from '../utils/LogicRoL32.jsx'
 import useLogicRoR32 from '../utils/LogicRoR32.jsx'
 import { useKnockout } from '../context/KnockoutContext.jsx'
 import { usePrediction } from '../context/PredictionContext.jsx'
+import AuthContext from '../context/AuthContext.jsx'
+import { toast, ToastContainer } from 'react-toastify'
+
+import SavePageButton from '../components/SavePageButton.jsx' 
 
 const Round32 = () => {
   useLogicRoL32()
   useLogicRoR32()
   const { best8,Top32,roL32Left,roR32Right,win32L,win32R,quartersL,quartersR,semisL,semisR,final,winner,third } = useKnockout();
   const {groups}=usePrediction()
+  const { accessToken } = useContext(AuthContext);
   const navigate = useNavigate();
  
   useEffect(() => {
@@ -22,7 +27,29 @@ const Round32 = () => {
       navigate('/MatchPrediction');
     }
   }, [best8, navigate]);
+
   const saver = async () => {
+    const allStringPredictions = [
+      ...win32L, ...win32R, //16
+      ...quartersL, ...quartersR, //8 
+      ...semisL, ...semisR, //4
+      ...final, //2
+      ...winner, //1
+      ...third//1
+    ];
+    
+    const areStringsIncomplete = allStringPredictions.length === 0 || allStringPredictions.some(
+      team => !team || typeof team !== 'string' || team.trim() === ""
+    );
+
+    if (areStringsIncomplete || allStringPredictions.length!=32) {
+      toast.error("Please fill out the complete bracket before locking it in!", {
+        position: "top-right",
+        autoClose: 3000
+      });
+      return;
+    }
+
     const ro32 = [...roL32Left, ...roR32Right];
     const ro16 = [...win32L, ...win32R];
     const quarters = [...quartersL, ...quartersR];
@@ -34,7 +61,8 @@ const Round32 = () => {
       const response = await fetch(`${import.meta.env.VITE_BACKEND}/api/matchPrediction`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json'
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${accessToken}`
         },
         credentials: 'include',
         body: JSON.stringify({ group: groups,knockouts:Top32,best8, ro32, ro16, quarters, semis, final, winner, thirdFinish: third })
@@ -46,44 +74,52 @@ const Round32 = () => {
         throw new Error(data.msg || 'Failed to save predictions');
       }
 
-      toast.update(toastId, { render: "Predictions locked successfully! 🏆", type: "success", isLoading: false, autoClose: 3000 });
-
+      toast.update(toastId, { render: "Predictions locked successfully!", type: "success", isLoading: false, autoClose: 3000,onClose: () => window.location.replace("/") });
     } catch (error) {
       toast.update(toastId, { render: error.message || "An error occurred while saving.", type: "error", isLoading: false, autoClose: 4000 });
     }
   }
+
   return (
-    
     <div className="items-center container mx-auto px-4 py-8">
-      <div className="mb-8 text-center">
-        <h1 className="text-3xl font-bold text-white mb-2">Tournament Knockout</h1>
-        <p className="text-gray-400">Round of 32 to Final</p>
-      </div>
+      <ToastContainer theme="dark" />
       
-      <div className="w-full overflow-x-auto pb-8" >
-        <div style={{zoom:"0.6"}} className="flex flex-row w-full min-w-350 h-200 lg:h-225 bg-gray-900 rounded-xl shadow-2xl border border-gray-700 relative overflow-hidden">
-          <div className="absolute inset-0 bg-gray-900/80 z-0"></div>
-          <div className="flex flex-row w-full h-full z-10 p-6">
-             <MatchColumn matches={8} side="left" round="ro32"/>
-             <ConnectorColumn pairs={4} side="left" />
-             <MatchColumn matches={4} side="left" round="ro16"/>
-             <ConnectorColumn pairs={2} side="left" />
-             <MatchColumn matches={2} side="left" round="quarters"/>
-             <ConnectorColumn pairs={1} side="left" />
-             <MatchColumn matches={1} side="left" round="semis"/>
-             <StraightConnector />
-             <FinalMatch />
-             <StraightConnector />
-             <MatchColumn matches={1} side="right" round="semis"/>
-             <ConnectorColumn pairs={1} side="right" />
-             <MatchColumn matches={2} side="right" round="quarters"/>
-             <ConnectorColumn pairs={2} side="right" />
-             <MatchColumn matches={4} side="right" round="ro16"/>
-             <ConnectorColumn pairs={4} side="right" />
-             <MatchColumn matches={8} side='right' round='ro32'/>
+      <div className="flex justify-end mb-4">
+        <SavePageButton targetId="bracket-capture-area" fileName="my-tournament-bracket.png" />
+      </div>
+
+      <div id="bracket-capture-area" className="bg-[#111827] p-4 sm:p-6 rounded-2xl w-full">
+        <div className="mb-8 text-center">
+          <h1 className="text-3xl font-bold text-white mb-2">Tournament Knockout</h1>
+          <p className="text-gray-400">Round of 32 to Final</p>
+        </div>
+        
+        <div className="w-full overflow-x-auto pb-8 no-scrollbar" >
+          <div style={{zoom:"0.6"}} className="flex flex-row w-full min-w-350 h-200 lg:h-225 bg-gray-900 rounded-xl shadow-2xl border border-gray-700 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gray-900/80 z-0"></div>
+            <div className="flex flex-row w-full h-full z-10 p-6">
+               <MatchColumn matches={8} side="left" round="ro32"/>
+               <ConnectorColumn pairs={4} side="left" />
+               <MatchColumn matches={4} side="left" round="ro16"/>
+               <ConnectorColumn pairs={2} side="left" />
+               <MatchColumn matches={2} side="left" round="quarters"/>
+               <ConnectorColumn pairs={1} side="left" />
+               <MatchColumn matches={1} side="left" round="semis"/>
+               <StraightConnector />
+               <FinalMatch />
+               <StraightConnector />
+               <MatchColumn matches={1} side="right" round="semis"/>
+               <ConnectorColumn pairs={1} side="right" />
+               <MatchColumn matches={2} side="right" round="quarters"/>
+               <ConnectorColumn pairs={2} side="right" />
+               <MatchColumn matches={4} side="right" round="ro16"/>
+               <ConnectorColumn pairs={4} side="right" />
+               <MatchColumn matches={8} side='right' round='ro32'/>
+            </div>
           </div>
         </div>
       </div>
+
       <div className="flex justify-center mt-10 mb-8">
         <button 
           onClick={saver}
